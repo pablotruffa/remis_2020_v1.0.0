@@ -1,0 +1,65 @@
+
+
+.info-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+    margin-bottom: 0.1em;
+    box-sizing: border-box;
+    border: 1px solid rgb(189, 189, 189);
+    
+}
+
+
+.info-list li span:first-child {
+    width: 50%;   
+}
+.info-list li span:last-child {
+    width: 50%;   
+}
+
+.driver-info {
+    margin: 2em 0em;
+}
+
+#reservation-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#reservation-actions div{
+    width: 49.5%;
+}
+
+#reservation-actions div a{
+    display: block;
+    border: 1px solid black;
+    background-color: rgb(253, 122, 0);
+    color: black;
+    text-align: center;
+}
+#reservation-actions div a:hover{
+    color: white;
+}
+
+
+@media screen and (min-width:480px){
+
+    #reservation-actions {
+        min-width: 500px;
+        width: 70%;
+    }
+
+    .info-list li span:first-child {
+        width: 70%;   
+    }
+    .info-list li span:last-child {
+        width: 30%;   
+    }
+
+    #reservation-actions div{
+        width: 49.5%;
+    }
+}

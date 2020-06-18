@@ -1,0 +1,22 @@
+button {
+    background: rgb(253,122,0);
+    border: 1px solid black;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    transition: all 0.3s ease ;
+}
+
+button:hover {
+    color: white;
+}
+
+div .form-check {
+    margin-bottom: 0.5em;
+}
+
+ul {
+    list-style: none;
+}

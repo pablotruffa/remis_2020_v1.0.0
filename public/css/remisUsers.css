@@ -1,0 +1,15 @@
+.table button {
+    color:black;
+    border: 1px solid black;
+    background: white;
+    transition: all 03.s ease;
+}
+
+.table button:hover {
+    color: rgb(253,122,0);
+}
+
+.table select {
+    padding: 1em;
+    box-sizing: border-box;
+}

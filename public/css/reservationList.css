@@ -1,0 +1,10 @@
+h1 {
+    width: 90%;
+    margin: auto;
+}
+
+@media screen and (min-width:480px){
+    h1 {
+        width: 100%;
+    }
+}

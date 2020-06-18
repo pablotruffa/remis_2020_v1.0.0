@@ -1,0 +1,115 @@
+
+
+#panel ul {
+    list-style: none;
+    width: 100%;
+}
+
+#panel form {
+    margin-bottom: 1em;
+}
+
+form input[type = 'date'],form input[type = 'text'] {
+    width: 10em;
+    padding: 1em;
+    box-sizing: border-box;
+    width:100%;
+}
+
+form button {
+    padding: 1em;
+    box-sizing: border-box;
+    width: 100%;
+    
+}
+
+#panel ul {
+    list-style: none;
+    margin: auto;
+}
+
+
+#panel ul li a {
+    display: flex;
+    margin-bottom: 0.1em;
+    width: 100%;
+    border: 1px solid black;
+    color: black;
+    justify-content: space-between;
+    background: rgb(253, 122, 0);
+    
+}
+
+#panel ul li a:hover {
+    color: white;
+}
+
+#new-reservation {
+    background: rgb(253, 122, 0);
+    color: black;
+    width: 90%;
+    margin: auto;
+    display: block;
+    border: 1px solid black;
+    text-align: center;
+}
+#new-reservation:hover{
+    color: white;
+}
+@media screen and (min-width:480px){
+
+    #panel {
+        display: grid;
+        grid-template-columns: 4fr 5fr;
+        grid-template-areas: "side-nav printable";
+    }
+    
+    #panel div:first-child {
+        grid-area: printable;
+    }
+    
+    
+    #panel div:last-child {
+        grid-area: side-nav;
+    }
+    
+    #panel ul {
+        list-style: none;
+        width: 100%;
+    }
+    
+    
+    #panel ul li a {
+        width: 90%;  
+    }
+    
+    #panel ul li a:hover {
+        color: white;
+    }
+    
+    #new-reservation {
+        width: 90%;
+    }
+    
+    
+    form input[type = 'date'],form input[type = 'text'] {
+        width: 10em;
+        padding: 1em;
+        box-sizing: border-box;
+        width:100%;
+    }
+    
+    form button {
+        padding: 1em;
+        box-sizing: border-box;
+        width: 100%;
+        
+    }
+    
+    
+    #panel div:first-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}

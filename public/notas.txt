@@ -1,0 +1,137 @@
+Definir un middleware que chequee que las tablas 1-n tengan
+al menos 1 contenido cargado.
+
+Definir middleware que autentique antes de eliminar algun record.
+
+Crear una clase Logs que lleve registro de todas las acciones del usuario o admin.
+
+Definir la constante date_default_timezone_set('America/Argentina/Buenos_Aires') en config o en un middleware
+
+Una reserva concretada no puede ser modificada.
+
+Refactorear modelos y funciones Models\Reservation
+
+[Agregar cedula Verde a vehiculo]
+
+para eliminar una reserva se debera ingresar un pin de confirmacion. (cuando se registre un usuario).
+
++ Cuando una reserva queda finalizada:
+    + Se registrara un Log con todos los datos de la reserva.
+    + Si se hace una busqueda por reserva finalizada,
+      se buscara la informacion del Log y no de las tablas relacionales.
+      
+      Si un chofer cambia el color de su auto, etc, los cambios se veran
+      reflejados en reservas para iniciar y no en las reservas finalizadas o pasadas.
+
+
+
+13/05/2020------------------------------------------- TO DO.
+
+ + Cambiar la busqueda por fecha
+   - tiene que redirigir a otra pantalla no a la de reservations.
+
+   - que pasa si una reserva se inicia a las 23:59? como continua en el siguiente dia?
+     + Reservas iniciadas keepAlive.
+     + Si no se encuentra iniciada -- el Mysql Schedule disparara un evento que la cambiara a postergada.
+
++ Editar una reserva iniciada
+  - Ver que no rompa con el horario (prevent past)
+  - se deberia poder elegir el mismo horario de antes sino el prevent lo romperia.
+  - condicionar que se le pueda poner cualquier horario.
+  
+Models/Logs 
++ create()
+
+Table Reservation Logs
+----------------------
++ id
++ reservation confirmation_number
++ reservation travel date
++ reservation travel time
++ reservation travel origin
++ reservation travel destiny
++ vehicle quantity
++ price
++ reservatin status
+
++ client (all_data)
++ driver (all data)
++ vehicle (all data)
++ timestamps
+
+Log Actions Table
+----------------------
++ id
++ action (CRUD)
+
+
+php doc - 
+composer require barryvdh/ide-helper-laravel
+
+
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER before_productos_delete
+BEFORE DELETE
+ON productos FOR EACH ROW
+BEGIN
+		
+    INSERT INTO delete_logs(nombre,color,fecha)
+    VALUES(old.nombre,(SELECT 
+		colores.nombre
+	  from colores
+		LEFT JOIN productos
+		on colores.id = productos.color_id 
+		where productos.id = old.id
+		limit 1
+		
+),NOW()) limit 1;
+END$$    
+
+DELIMITER ;
+
+/*
+* PROCEDURES -----------------------------------------------
+
+    SHOW PROCEDURE STATUS;
+    SHOW FUNCTION STATUS;
+    SHOW PROCEDURE STATUS WHERE Db = 'db_name';
+    SHOW FUNCTION STATUS WHERE Db = 'db_name';
+
+DROP procedure IF EXISTS postpone_reservations;
+DELIMITER $$
+CREATE PROCEDURE postpone_reservations()
+BEGIN
+	UPDATE reservations
+	SET reservation_status = 3
+	WHERE 
+	travel_date < CURRENT_DATE
+	AND
+	reservation_status = 1;
+END$$
+DELIMITER ;
+*/
+
+
+/*
+* SCHEDULE ----------------------------------------
+
+DROP EVENT IF EXISTS postpone_yesterday_reservations;
+CREATE EVENT postpone_yesterday_reservations
+ON SCHEDULE EVERY 24 HOUR
+STARTS '2020-05-18 00:00:00'
+DO CALL postpone_reservations();
+
+*/
+
+
+-------------------------------- clientes -------------------------------
+Eliminar un cliente:
+  - Las reservas confirmadas se eliminaran.
+
+Eliminar cliente durante viaje
+- Accion denegada.
+  - solucion -> cancelar reserva/s activas -> eliminar cliente.

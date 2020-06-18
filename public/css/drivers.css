@@ -1,0 +1,112 @@
+button {
+    
+    border: 1px solid black;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    transition: all 0.3s ease ;
+}
+
+#new-driver {
+    background: rgb(253,122,0);
+    width: 100%;
+    display: block;
+    border: 1px solid black;
+    color: black;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    transition: all 0.3s ease ;
+}
+
+#new-driver:hover {
+    color: white;
+} 
+
+
+form input[type="search"] {
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    margin-bottom: 0.2em;
+}
+
+#driver-profile {
+    width: 300px;
+    padding: 0.5em;
+    border: 1px solid rgb(194, 194, 194);
+}
+
+#edit-driver, #delete-driver, #patch-driver, #assign-vehicle, #unassign-vehicle {
+    width: 100%;
+    display: block;
+    padding: 1em;
+    box-sizing: border-box;
+    color: black;
+    border:1px solid black;
+    background: rgb(253,122,0);
+    margin: 0.5em 0em;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+#edit-driver:hover, #delete-driver:hover, #patch-driver:hover, #assign-vehicle:hover, #unassign-vehicle:hover {
+    color: white;
+}
+
+#data-assigned {
+    list-style: none;
+}
+
+
+.driver-data {
+    list-style: none;
+}
+
+.driver-data li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 0.3em 0em;
+}
+
+#driver-data {
+    list-style: none;
+}
+
+#driver-data li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 0.3em 0em;
+}
+
+.form-group label{
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select, button {
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+
+
+button:hover {
+    color: white;
+}
+
+@media screen and (min-width:480px){
+
+}

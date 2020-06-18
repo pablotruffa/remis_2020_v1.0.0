@@ -1,0 +1,92 @@
+* {
+ margin: 0;
+ padding: 0;
+ font-family: Arial, Helvetica, sans-serif;
+}
+
+#site {
+    display: grid;
+    grid-template-rows: 10vh 80vh 10vh;
+    grid-template-areas: 
+                        'header'
+                        'main'
+                        'footer';
+}
+
+
+/* Grid Areas ----------------------------- */
+header {
+    grid-area: header ;
+}
+
+main {
+    grid-area: main;
+}
+
+footer{
+    grid-area: footer ;
+}
+
+/* Header ----------------------------- */
+
+header {
+    border-bottom: 3px solid rgb(253, 122, 0);
+}   
+
+header, footer {
+    background: #000000;
+    color: #ffffff;
+}
+
+
+/* Main ----------------------------- */
+
+#login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+#login h1 {
+    font-size: 2.5rem;
+}
+
+main #login, header nav, footer div {
+    width: 80%;
+    margin: auto;
+}
+
+#login form {
+    display: flex;
+    flex-direction: column;
+    
+} 
+
+#login form > div input, #login form > div button {
+    width: 100%;
+    height: 3.5em;
+    margin: 0.5em 0em;
+    box-sizing: border-box;
+    padding: 0.5em;
+}
+
+/* Footer ----------------------------- */
+
+footer div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media screen and (min-width:480px){
+    #login h1 {
+        font-size: 3rem;
+    }
+}
+
+
+
+

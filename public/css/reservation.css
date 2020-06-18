@@ -1,0 +1,26 @@
+.form-group label{
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select, button {
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+button {
+    color: black;
+    border: 1px solid black;
+    background: rgb(253, 122, 0);
+    font-size: 14px;;
+}
+
+button:hover {
+    color: white;
+}
+
+@media screen and (min-width:480px){
+
+}

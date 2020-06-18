@@ -1,0 +1,46 @@
+.alert {
+    width: auto;
+    padding: 0.6em;
+    box-sizing: border-box;
+    margin: 0.5em 0em;
+    display: flex;
+}
+
+.alert p {
+    width: 99%;
+}
+
+.alert a {
+    font-size: 0px;
+}
+
+.alert-success {
+    border: 1px solid green;
+}
+.alert-danger {
+    border: 1px solid red;
+}
+.alert-info {
+    border: 1px solid rgb(0, 116, 224);
+}
+.alert-warning {
+    border: 1px solid rgb(204, 158, 6);
+}
+
+.success {
+    color:green;
+}
+.danger {
+    color:red;
+}
+.info {
+    color:rgb(0, 116, 224);
+}
+.warning {
+    color:   rgb(204, 158, 6);
+}
+
+.title {
+    font-weight: bold;
+    margin-right: 0.5em;
+}

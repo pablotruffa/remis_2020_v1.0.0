@@ -1,0 +1,43 @@
+.table-responsive {
+    max-width: 90vw;
+    overflow: scroll;
+}
+
+.table thead th {
+    background:rgb(253, 122, 0);
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+.table tr, .table td {
+    border:1px solid rgb(206, 205, 205);
+}
+
+.table td {
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+.table-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background: white;
+    box-sizing: border-box;
+    border: 1px solid rgb(138, 138, 138);
+    font-size: 1rem;
+    color:black;
+    transition: all 0.3s ease;
+}
+
+.table-btn:hover {
+    color:rgb(253, 122, 0);
+}
+
+@media screen and (min-width:480px){
+    
+    .table-responsive {
+        width: auto;
+        overflow: auto;
+    }
+}

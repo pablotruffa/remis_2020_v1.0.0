@@ -1,0 +1,24 @@
+.form-group label{
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select, button {
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+.data-list {
+    list-style: none;
+}
+
+.data-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 0.3em 0em;
+}

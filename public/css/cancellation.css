@@ -1,0 +1,17 @@
+textarea {
+    width: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+button {
+    background: rgb(253,122,0);
+    border: 1px solid black;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+}
+
+button:hover {
+    color: white;
+}
