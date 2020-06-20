@@ -7,10 +7,32 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * App\Models\Presenteeism
+ *
+ * @property int $id
+ * @property string $state
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Presenteeism whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Presenteeism extends Model
-{
+{   
+    /**
+     * @var string La tabla que comunica al modelo.
+     */
     protected $table = 'presenteeism';
 
+    /**
+     * @var array campo de asignación masiva permitida.
+     */
     public static $rules =[
         'driver' => 'array',
         'driver.*' => array(
@@ -20,6 +42,11 @@ class Presenteeism extends Model
                         ),
     ];
 
+    /**
+     * getAttendance Retorna la asistencia de los choferes
+     *
+     * @return array
+     */
     protected static function getAttendance()
     {
         $attendance = ['present'=>[], 'absent'=>[]];
@@ -36,7 +63,13 @@ class Presenteeism extends Model
         return $attendance;
 
     }
-
+    
+    /**
+     * Función que registra el presentismo.
+     *
+     * @param  mixed $request
+     * @return bool
+     */
     protected static function register(Request $request)
     {   
 
@@ -53,17 +86,23 @@ class Presenteeism extends Model
             ->where('assigned_vehicle','!=',null)
             ->get();
 
-        if( count($drivers) == count($request->input('driver')) )
-        {   
-            $ids =  implode(',',$request->input('driver'));
-            DB::update("UPDATE drivers SET presenteeism = CASE WHEN FIND_IN_SET(id , :ids) THEN 1 ELSE 2 END ",['ids' => $ids]); 
-            return true;
-        }
-        return false;
+            if( count($drivers) == count($request->input('driver')) )
+            {   
+                $ids =  implode(',',$request->input('driver'));
+                DB::update("UPDATE drivers SET presenteeism = CASE WHEN FIND_IN_SET(id , :ids) THEN 1 ELSE 2 END ",['ids' => $ids]); 
+                return true;
+            }
+            return false;
         }
         return false;    
     }
-
+    
+    /**
+     * verifyActiveReservations Verifica si el chofer se encuentra en una reserva activa.
+     *
+     * @param  mixed $drivers
+     * @return array
+     */
     public static function verifyActiveReservations($drivers)
     {   
         $active = [];

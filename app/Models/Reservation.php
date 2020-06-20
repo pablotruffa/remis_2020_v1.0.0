@@ -9,11 +9,56 @@ use App\Models\ReservationStatus;
 use App\Models\CancellationReason;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Reservation
+ *
+ * @property int $id
+ * @property int $confirmation_number
+ * @property string $travel_date
+ * @property string $travel_time
+ * @property string $origin
+ * @property string $destiny
+ * @property int $vehicle_quantity
+ * @property float $price
+ * @property float $commission_percentage
+ * @property int $reservation_status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CancellationReason[] $cancellation
+ * @property-read int|null $cancellation_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Client[] $client
+ * @property-read int|null $client_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Driver[] $driver
+ * @property-read int|null $driver_count
+ * @property-read \App\Models\ReservationLog|null $log
+ * @property-read \App\Models\ReservationStatus $status
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereCommissionPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereConfirmationNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereDestiny($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereOrigin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereReservationStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereTravelDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereTravelTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reservation whereVehicleQuantity($value)
+ * @mixin \Eloquent
+ */
 class Reservation extends Model
 {   
-        
+    /**
+     * @var string La tabla que comunica al modelo.
+     */
     protected $table = 'reservations';
     
+    /**
+     * @var array campo de asignación masiva permitida.
+     */
     protected $fillable = [
         'confirmation_number',
         'travel_date',
@@ -26,6 +71,9 @@ class Reservation extends Model
         'reservation_status',
     ]; 
 
+    /**
+     * @static $rules reglas de validación.
+     */
     public static $rules = [
         'travel_date'           =>'required|date_format:Y-m-d',
         'travel_time'           =>'required|date_format:H:i',
@@ -42,6 +90,9 @@ class Reservation extends Model
                             ),
     ];
 
+    /**
+     * @static $driver_assign_radio_rules reglas de validación.
+     */
     public static $driver_assign_radio_rules =[
         'driver' => array(
             'required',
@@ -51,6 +102,9 @@ class Reservation extends Model
         ),
     ];
 
+    /**
+     * @static $driver_assign_checkbox_rules reglas de validación.
+     */
     public static $driver_assign_checkbox_rules =[
         'driver' => 'required|array',
         'driver.*' => array(
@@ -61,6 +115,9 @@ class Reservation extends Model
                         ),
     ];
 
+    /**
+     * @static $messages mensajes de validación.
+     */
     public static $messages = [
         'travel_date.required'      => 'El campo no puede quedar vacío.',
         'travel_date.date_format'   => 'No cumple el formato de fecha.',
@@ -99,20 +156,32 @@ class Reservation extends Model
     
     ];
 
+        
     /**
-     * Relationships ----------------------------------------------------------------------------
+     * Relación de Eloquent
+     *
+     * @return void
      */
-
     public function log()
     {
         return $this->hasOne(ReservationLog::class,'confirmation_number','confirmation_number');
     }
 
+     /**
+     * Relación de Eloquent
+     *
+     * @return void
+     */
     public function status()
     {
         return $this->belongsTo(ReservationStatus::class,'reservation_status','id');
     }
 
+     /**
+     * Relación de Eloquent
+     *
+     * @return void
+     */
     public function client()
     {   
 
@@ -125,20 +194,33 @@ class Reservation extends Model
         return $this->belongsToMany(Client::class, 'reservation_has_client','reservation_id','client_id')->withTrashed()->withTimestamps();
     }
 
+     /**
+     * Relación de Eloquent
+     *
+     * @return void
+     */
     public function cancellation()
     {
         return $this->belongsToMany(CancellationReason::class, 'reservation_has_cancellation','reservation_id','reason_id')->withPivot('remark')->withTimestamps();
     }
 
+     /**
+     * Relación de Eloquent
+     *
+     * @return void
+     */
     public function driver()
     {
-        return $this->belongsToMany(Driver::class,'reservation_has_driver','reservation_id','driver_id')->withTimestamps();
+        return $this->belongsToMany(Driver::class,'reservation_has_driver','reservation_id','driver_id')->withTrashed()->withTimestamps();
     }
 
-    /**
-     * Getters ----------------------------------------------------------------------------
-     */
 
+        
+    /**
+     * getPanelInfo Retorna las reservas del dia y los estados actuales
+     *
+     * @return mixed
+     */
     protected static function getPanelInfo()
     {   
         $today = date('Y-m-d', time());
@@ -218,7 +300,12 @@ class Reservation extends Model
         return null;
         
     }
-
+    
+    /**
+     * getConfirmed Retorna las reservas confirmadas
+     *
+     * @return array Reservation
+     */
     protected static function getConfirmed()
     {   
         return self::where('travel_date',date('Y-m-d',time()))
@@ -227,7 +314,12 @@ class Reservation extends Model
                     ->orderBy('travel_time')
                     ->get();
     }
-
+    
+    /**
+     * getInitiated Retorna las reservas iniciadas
+     *
+     * @return array Reservation
+     */
     protected static function getInitiated()
     {        
         return self::where('travel_date',date('Y-m-d', time()))
@@ -241,6 +333,11 @@ class Reservation extends Model
                     ->get();
     }
 
+    /**
+     * getInitiated Retorna las reservas pospuestas
+     *
+     * @return array 
+     */
     protected static function getPostponed()
     {
         return self::where('travel_date','<',date('Y-m-d', time()))
@@ -251,6 +348,11 @@ class Reservation extends Model
                     ->get();
     }
 
+    /**
+     * getInitiated Retorna las reservas canceladas
+     *
+     * @return object Reservation
+     */
     protected static function getCancelled()
     {
         return self::where('travel_date',date('Y-m-d', time()))
@@ -267,6 +369,11 @@ class Reservation extends Model
                     ->get();
     }
 
+    /**
+     * getInitiated Retorna las reservas completadas
+     *
+     * @return object Reservation
+     */
     protected static function getCompleted()
     {
         return self::where('travel_date',date('Y-m-d', time()))
@@ -277,38 +384,82 @@ class Reservation extends Model
                     ->get();
     }
 
+        
+    /**
+     * getTime Retorna horario del viaje
+     *
+     * @param  object $reservation
+     * @return string 
+     */
     protected static function getTime(Reservation $reservation)
     {
         return date('H:i',strtotime($reservation->travel_time));
     }
-
+        
+    /**
+     * getDate Retoran fecha del viaje
+     *
+     * @param  object $reservation
+     * @return string
+     */
     protected static function getDate(Reservation $reservation)
     {
         return date('d-m-Y',strtotime($reservation->travel_date));
     }
-
+    
+    /**
+     * getCreationDate Retorna la fecha de confirmación de la reserva
+     *
+     * @param  mixed $reservation
+     * @return void
+     */
     protected static function getCreationDate(Reservation $reservation)
     {
         return date('d-m-Y H:i',strtotime($reservation->created_at));
     
-    }
+    }    
+
+    /**
+     * getUpdatedDate Retorna la fecha de actualización de la reserva
+     *
+     * @param  mixed $reservation
+     * @return void
+     */
     protected static function getUpdatedDate(Reservation $reservation)
     {
         return date('d-m-Y H:i',strtotime($reservation->updated_at));
     }
-
+    
+    /**
+     * preventBookingPast Previene que se realicen reservas en una fecha menor a la actual
+     *
+     * @param  mixed $reservation_date
+     * @return bool
+     */
     protected static function preventBookingPast($reservation_date)
     {   
         $now = date('Y-m-d H:i:s');
         return ($reservation_date < $now) ? false : true;
     }
-
+    
+    /**
+     * dateCheckToStart Verifica que la fecha de inicio de la reserva sea igual a la fecha actual
+     *
+     * @param  mixed $reservation
+     * @return bool
+     */
     protected static function dateCheckToStart(Reservation $reservation)
     {   
         $today = date('Y-m-d', time());
         return ($reservation->travel_date == $today)? true:false;
     }
-
+    
+    /**
+     * preventEdit Previene que se pueda editar la reserva dependiendo el estado.
+     *
+     * @param  mixed $reservation
+     * @return bool
+     */
     protected static function preventEdit(Reservation $reservation)
     {
         switch ($reservation->reservation_status) {
@@ -324,7 +475,12 @@ class Reservation extends Model
         }
         
     }
-
+    
+    /**
+     * getTodaysReservations Retorna las reservas del día
+     *
+     * @return array 
+     */
     protected static function getTodaysReservations()
     {
         $today = date('Y-m-d', time());
@@ -337,6 +493,11 @@ class Reservation extends Model
         return $reservations;
     }
 
+    /**
+     * getTodaysReservations Retorna las reservas del día que se encuentra canceladas
+     *
+     * @return array 
+     */
     protected static function getTodaysCancellations()
     {   
         $today = date('Y-m-d', time());
@@ -349,6 +510,11 @@ class Reservation extends Model
 
     }
 
+     /**
+     * getTodaysReservations Retorna las reservas del día que se encuentra pospuestas
+     *
+     * @return array 
+     */
     protected static function getPendingReservations()
     {
         $yesterday = date('Y-m-d',strtotime("-1 days"));
@@ -363,7 +529,11 @@ class Reservation extends Model
         return $reservations; 
     }
 
-
+     /**
+     * getTodaysReservations Retorna las reservas del día que se encuentra completadas
+     *
+     * @return array 
+     */
     protected static function getTodaysFinishedReservations()
     {
         $today = date('Y-m-d', time());
@@ -373,7 +543,13 @@ class Reservation extends Model
         ->get();
         return $reservations;
     }
-
+    
+    /**
+     * getCurrentDriver Retorna los choferes asignados a la reserva
+     *
+     * @param  object $reservation
+     * @return array
+     */
     public static function getCurrentDriver(Reservation $reservation)
     {
         $drivers = [];
@@ -384,62 +560,106 @@ class Reservation extends Model
         return $drivers;
     }
 
+    
     /**
-     * Driver methods --------------------------------------------------------------
+     * removeDriver Quita al chofer de la reserva
+     *
+     * @param  object $reservation
+     * @return void
      */
-
     public function removeDriver(Reservation $reservation)
     {
         $reservation->driver()->sync([]);
     }
-
+    
+    /**
+     * assignDrivers Asigna los choferes a la reserva
+     *
+     * @param  object $reservation
+     * @param  mixed $request
+     * @return void
+     */
     public static function assignDrivers(Reservation $reservation, $request)
     {
         $drivers = Driver::whereIn('id',$request->input('driver'))->get();
         $reservation->driver()->sync($drivers);
     }
-
+    
+    /**
+     * assignDriver Asigna chofer a la reserva
+     *
+     * @param  object $reservation
+     * @param  mixed $request
+     * @return void
+     */
     public static function assignDriver(Reservation $reservation, $request)
     {
         $driver = Driver::findOrFail($request->input('driver'));
         $reservation->driver()->sync($driver->id);
     }
-
+    
     /**
-     * Client methods --------------------------------------------------------------
+     * removeClient Quita al cliente de la reserva
+     *
+     * @param  object $reservation
+     * @return void
      */
-
     public function removeClient(Reservation $reservation)
     {
         $reservation->client()->detach($reservation->client[0]->id);  
     }
 
     
-
+    
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function confirm()
     {
         $this->reservation_status = 1;
         $this->save();
     }
 
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function start()
     {
         $this->reservation_status = 2;
         $this->save();
     }
 
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function restart()
     {
         $this->reservation_status = 2;
         $this->save();
     }
 
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function rollbackToStart()
     {
         $this->reservation_status = 1;
         $this->save();
     }
     
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function cancel()
     {
         $this->reservation_status = 4;
@@ -449,7 +669,11 @@ class Reservation extends Model
         
     }
     
-    
+    /**
+     * confirm Cambia el estado de reserva
+     *
+     * @return void
+     */
     public function end()
     {
         $this->reservation_status = 5;
@@ -457,7 +681,13 @@ class Reservation extends Model
         $log = $this->fresh('client','status','driver.vehicle.brand','driver.vehicle.color');
         $this->saveLog($log);
     }
-
+    
+    /**
+     * saveLog
+     *
+     * @param  mixed $log
+     * @return void
+     */
     private function saveLog($log)
     {
         try {
@@ -470,7 +700,12 @@ class Reservation extends Model
         }
         
     }
-
+    
+    /**
+     * getDriverIncome Obtiene los ingresos del chofer
+     *
+     * @return void
+     */
     public function getDriverIncome()
     {
         $commission = $this->price *  $this->commission_percentage /100;
@@ -478,12 +713,22 @@ class Reservation extends Model
         return $driver_income;
     }
 
+    /**
+     * getDriverIncome Obtiene los ingresos del los choferes
+     *
+     * @return void
+     */
     public function getDriversIncome()
     {
         $commission = $this->price *  $this->commission_percentage /100;
         return  $this->price - $commission;
     }
 
+    /**
+     * getDriverIncome Obtiene los ingresos de la remisería
+     *
+     * @return void
+     */
     public function getHouseIncome()
     {
         return $this->price - $this->getDriversIncome();

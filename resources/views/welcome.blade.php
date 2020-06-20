@@ -35,7 +35,7 @@
   <ol>
     <li>Para que una reserva pueda iniciarse, deben haber choferes disponibles para tomar la reserva: <a href="{{route('drivers.index')}}">Choferes</a></li>
     <li>A su vez, los choferes deben estar presentes: <a href="{{route('presenteeism.index')}}">Presentismo</a></li>
-    <li>Podras registrar choferes completando el formulario. <a href="{{route('driver.formNew')}}">Registrar chofer</a></li>
+    <li>Podrás registrar choferes completando el formulario. <a href="{{route('driver.formNew')}}">Registrar chofer</a></li>
   </ol>
 </div>
 <h3>Vehículos</h2>
@@ -57,7 +57,7 @@
     <h3>Viajes</h3>
     <div>
       <ol>
-        <li>Podras revisar tus viajes realizados, los detalles, fechas, etc.</li>
+        <li>Podrás revisar tus viajes realizados, los detalles, fechas, etc.</li>
         <li>Descargá un informe de tus viajes.</li>
       </ol>
     </div>

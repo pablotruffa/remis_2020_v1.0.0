@@ -42,9 +42,8 @@
         <ul class="data-list">
             <li><span>Esperado</span><span>${{ $audit->getExpectedIncome() }} ARS</span></li>
             <li><span>Alcanzado</span><span>${{ $audit->getGlobalIncome() }} ARS</span></li>
-            <li><span>Para la Remiseria</span><span>${{ $audit->getHouseIncome() }} ARS</span></li>
+            <li><span>Para la Remisería</span><span>${{ $audit->getHouseIncome() }} ARS</span></li>
             <li><span>Para los Choferes</span><span>${{ $audit->getDriversIncome() }} ARS</span></li>
-            <li><span></span><span></span></li>
         </ul>
 
         @if( count($audit->getCompletedReservations()) > 0 )
@@ -58,7 +57,7 @@
                 <th>Fecha</th>
                 <th>Precio</th>
                 <th>% Comisión</th>
-                <th>Ingreso Remiseria</th>
+                <th>Ingreso Remisería</th>
                 <th>Ingreso Choferes</th>
                 <th>Subtotal</th>
                 <th>Total</th>

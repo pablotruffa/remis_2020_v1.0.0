@@ -10,18 +10,72 @@ use Illuminate\Database\Eloquent\Model;
 
 class Audit
 {   
-    protected $from;
-    protected $to;
-    protected $reservations;
-    protected $status;
-    protected $globalIncome;
-    protected $expectedIncome;
-    protected $lostIncome;
-    protected $houseIncome;
+        
+        
+    /**
+     * from
+     *
+     * @var string la fecha "desde".
+     */
+    protected $from;    
+    
+    /**
+     * to
+     *
+     * @var string la fecha "hasta".
+     */
+    protected $to;    
+    
+    /**
+     * reservations
+     *
+     * @var mixed Collección de reservas.
+     */
+    protected $reservations;    
+    
+    /**
+     * status
+     *
+     * @var array Status general de todas las reservas.
+     */
+    protected $status;    
+    
+    /**
+     * globalIncome
+     *
+     * @var mixed Ingresos general.
+     */
+    protected $globalIncome;    
+    
+    /**
+     * expectedIncome
+     *
+     * @var mixed Ingresos esperados.
+     */
+    protected $expectedIncome;       
+    
+    /**
+     * houseIncome
+     *
+     * @var mixed Ingresos de la Remiseria.
+     */
+    protected $houseIncome;    
+    
+    /**
+     * driversIncome
+     *
+     * @var mixed Ingresos de los choferes.
+     */
     protected $driversIncome;
     
     
-
+    
+    /**
+     * __construct
+     *
+     * @param  array $dates Fechas desde y hasta del formulario.
+     * @return void
+     */
     public function __construct(array $dates = null)
     {
         $this->setDates($dates);
@@ -29,22 +83,43 @@ class Audit
         $this->setStatus();
         $this->setIncome();
     }
-
+        
+    /**
+     * Busca la fecha desde.
+     *
+     * @return string
+     */
     public function getFrom()
     {
         return $this->from;
-    
+
     }
+        
+    /**
+     * Busca la propiedad to/hasta
+     *
+     * @return string
+     */
     public function getTo()
     {
         return $this->to;
     }
-
+    
+    /**
+     * Busca las reservas
+     *
+     * @return array
+     */
     public function getReservations()
     {
         return $this->reservations;
     }
-
+    
+    /**
+     * getCompletedReservations Busca las reservas con status 5
+     *
+     * @return array
+     */
     public function getCompletedReservations()
     {
         $completed = [];
@@ -57,32 +132,63 @@ class Audit
         }
         return $completed;
     }
-
+    
+    /**
+     * getStatus Busca todos los estados
+     *
+     * @return array
+     */
     public function getStatus()
     {
         return $this->status;
     }
-
+    
+    /**
+     * getGlobalIncome Busca los ingresos.
+     * 
+     * @return integer|float
+     */
     public function getGlobalIncome()
     {
         return $this->globalIncome;
     }
-
+    
+    /**
+     * getExpectedIncome Busca las ganancias especuladas.
+     *
+     * @return integer|float
+     */
     public function getExpectedIncome()
     {
         return $this->expectedIncome;
     }
-
+    
+    /**
+     * getHouseIncome Filtra los ingresos de la Remisería.
+     *
+     * @return integer|float
+     */
     public function getHouseIncome()
     {
         return $this->houseIncome;
     }
-
+    
+    /**
+     * getDriversIncome Filtra los ingresos de los choferes.
+     *
+     * @return integer|float
+     */
     public function getDriversIncome()
     {
         return $this->driversIncome;
     }
-
+    
+    /**
+     * setDates Setea las propiedades $from y $to para filtrar la busqueda de las reservas.
+     *
+     * @param  mixed
+     * @return void
+     */
     protected function setDates($dates = null)
     {
         if(!$dates){
@@ -93,12 +199,22 @@ class Audit
             $this->to   = $dates['to'];;
         }
     }
-
+    
+    /**
+     * setReservations Setea la propiedad $reservations.
+     *
+     * @return void
+     */
     protected function setReservations()
     {
         $this->reservations = Reservation::whereBetween('travel_date',[$this->from,$this->to])->orderBy('travel_date','DESC')->get();
     }
-
+    
+    /**
+     * setStatus Setea la propiedad $status
+     *
+     * @return void
+     */
     public function setStatus()
     {   
         $status = [
@@ -121,7 +237,12 @@ class Audit
         }
         $this->status = $status;
     }
-
+    
+    /**
+     * setIncome Setea las propiedadaes $globalIncome, $expectedIncome, $houseIncome,$driversIncome
+     *
+     * @return void
+     */
     protected function setIncome()
     {
         $globalIncome   = 0;
@@ -149,12 +270,24 @@ class Audit
         $this->driversIncome    = $driversIncome;
         $this->expectedIncome   = $expectedIncome;
     }
-
+    
+    /**
+     * getHouseShare Retorna los ingresos de la remisería.
+     *
+     * @param  array $reservation
+     * @return mixed
+     */
     protected function getHouseShare($reservation)
     {
         return $reservation->price * $reservation->commission_percentage / 100;
     }
-
+    
+    /**
+     * getDriversShare Retorna los ingresos de los choferes.
+     *
+     * @param  mixed $reservation
+     * @return void
+     */
     protected function getDriversShare($reservation)
     {
         $commission = $this->getHouseShare($reservation);

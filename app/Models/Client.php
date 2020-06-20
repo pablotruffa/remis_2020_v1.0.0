@@ -6,14 +6,59 @@ use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Client
+ *
+ * @property int $id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $identification_card_number
+ * @property string $date_of_birth
+ * @property string|null $picture
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDateOfBirth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereIdentificationCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client wherePicture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Client extends Model
 {   
     use SoftDeletes;
+
+    /**
+     * @var string La tabla que comunica al modelo.
+     */
     protected $table = 'clients';
+    
+    /**
+     * @var string campo invisible en la relación de modelos.
+     */
     protected $hidden = ['pivot'];
 
+    /**
+     * @var array campo de asignación masiva permitida.
+     */
     protected $fillable = ['first_name','last_name','email','identification_card_number','date_of_birth','picture'];
 
+    /**
+     * @static $rules reglas de validación.
+     */
     public static $rules = [
         'first_name'                        =>'required|string|min:2|max:150',
         'last_name'                         =>'required|string|min:2|max:150',
@@ -24,6 +69,13 @@ class Client extends Model
         
     ];
 
+        
+    /**
+     * Reglas de validación
+     *
+     * @param  mixed $id
+     * @return array
+     */
     public static function edit_rules($id){
         return [
             'first_name'                    =>'required|string|min:2|max:150',
@@ -35,6 +87,9 @@ class Client extends Model
         ];
     }
 
+    /**
+     * @static $messages mensajes de validación.
+     */
     public static $messages = [
         'first_name.required'               => 'El campo no puede quedar vacío.',
         'first_name.min'                    => 'El nombre debe tener al menos 2 caracteres.',
@@ -62,7 +117,13 @@ class Client extends Model
 
     ];
 
-
+    
+    /**
+     * isInAInitiatedReservation
+     *
+     * @param  mixed $id
+     * @return bool
+     */
     public static function isInAInitiatedReservation($id)
     {
         $reservation = Reservation::whereHas('client', function($q) use ($id){
@@ -77,6 +138,5 @@ class Client extends Model
         }
         return false;
     }
-
     
 }

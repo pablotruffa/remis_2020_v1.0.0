@@ -15,9 +15,9 @@ class CreateEventPostponeReservations extends Migration
     public function up()
     {  
        //Comment when testing...
-       DB::unprepared('SET GLOBAL event_scheduler = ON');
-       DB::unprepared('DROP EVENT IF EXISTS postpone_yesterday_reservations');
-       DB::unprepared("CREATE EVENT postpone_yesterday_reservations ON SCHEDULE EVERY 24 HOUR STARTS '2020-05-18 00:00:00' DO CALL postpone_reservations()");
+       //DB::unprepared('SET GLOBAL event_scheduler = ON');
+       //DB::unprepared('DROP EVENT IF EXISTS postpone_yesterday_reservations');
+       //DB::unprepared("CREATE EVENT postpone_yesterday_reservations ON SCHEDULE EVERY 24 HOUR STARTS '2020-05-18 00:00:00' DO CALL postpone_reservations()");
      
     }
 

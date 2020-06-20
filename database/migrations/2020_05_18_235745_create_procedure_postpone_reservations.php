@@ -15,8 +15,8 @@ class CreateProcedurePostponeReservations extends Migration
     public function up()
     {   
         //Comment when testing...
-        DB::unprepared('DROP procedure IF EXISTS postpone_reservations');
-        DB::unprepared('CREATE PROCEDURE postpone_reservations() UPDATE reservations SET reservation_status = 3 WHERE travel_date < CURRENT_DATE AND reservation_status = 1');
+        //DB::unprepared('DROP procedure IF EXISTS postpone_reservations');
+        //DB::unprepared('CREATE PROCEDURE postpone_reservations() UPDATE reservations SET reservation_status = 3 WHERE travel_date < CURRENT_DATE AND reservation_status = 1');
     }
 
     /**

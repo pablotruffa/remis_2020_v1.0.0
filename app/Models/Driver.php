@@ -8,14 +8,67 @@ use App\Models\Presenteeism;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Driver
+ *
+ * @property int $id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $identification_card_number
+ * @property string $car_license
+ * @property int|null $assigned_vehicle
+ * @property string $date_of_birth
+ * @property string|null $picture
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \App\Models\Presenteeism $presenteeism
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reservation[] $reservation
+ * @property-read int|null $reservation_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Driver onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereAssignedVehicle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereCarLicense($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereDateOfBirth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereIdentificationCardNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver wherePicture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver wherePresenteeism($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Driver whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Driver withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Driver withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Driver extends Model
 {   
     use SoftDeletes;
+
+    /**
+     * @var string La tabla que comunica al modelo.
+     */
     protected $table = 'drivers';
+
+    /**
+     * @var string campo invisible en la relación de modelos.
+     */
     protected $hidden = ['pivot'];
 
+    /**
+     * @var array campos de asignación masiva permitida.
+     */
     protected $fillable = ['first_name','last_name','email','identification_card_number','car_license','date_of_birth','picture','presenteeism'];
 
+    /**
+     * @static $rules reglas de validación.
+     */
     public static $rules = [
         'first_name'                    =>'required|string|min:2|max:150',
         'last_name'                     =>'required|string|min:2|max:150',
@@ -27,6 +80,13 @@ class Driver extends Model
         
     ];
 
+        
+    /**
+     * Reglas de validación.
+     *
+     * @param  mixed $id
+     * @return array
+     */
     public static function edit_rules($id){
         return [
             'first_name'                    =>'required|min:2|max:150',
@@ -39,6 +99,9 @@ class Driver extends Model
         ];
     }
 
+    /**
+     * @static $messages mensajes de validación.
+     */
     public static $messages = [
         'first_name.required' => 'El campo no puede quedar vacío.',
         'first_name.min' => 'El nombre debe tener al menos 2 caracteres.',
@@ -70,25 +133,45 @@ class Driver extends Model
         'picture.image' => 'No cumple el formato de imagen.',
 
     ];
-
+    
+    /**
+     * Relación de eloquent
+     *
+     * @return void
+     */
     public function vehicle()
     {
         return $this-> belongsTo(Vehicle::class,'assigned_vehicle');
     }
 
+    /**
+     * Relación de eloquent
+     *
+     * @return void
+     */
     public function reservation()
     {
         return $this->belongsToMany(Reservation::class,'reservation_has_driver','driver_id','reservation_id');
     }
 
+    /**
+     * Relación de eloquent
+     *
+     * @return void
+     */
     public function presenteeism()
     {
         return $this->belongsTo(Presenteeism::class, 'presenteeism');
     }
-    /**
-     * Getters -----------------------------------------------------------
-     */
+   
 
+        
+    /**
+     * driverHasReservations
+     *
+     * @param  object $driver
+     * @return array reservas
+     */
     public static function driverHasReservations(Driver $driver)
     {
         $reservations = [];

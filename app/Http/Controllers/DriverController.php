@@ -281,7 +281,7 @@ class DriverController extends Controller
             'title'=>'Acción completada!',
             'content'=>"El chofer fue restablecido.",
         ];
-        return redirect()->back()->with('message',$message);
+        return redirect()->route('drivers.index')->with('message',$message);
     }
 
 }

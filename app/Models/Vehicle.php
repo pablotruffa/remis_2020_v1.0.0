@@ -4,12 +4,50 @@ namespace App\Models;
 use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Vehicle
+ *
+ * @property int $id
+ * @property string $patent
+ * @property string $model
+ * @property string $year
+ * @property string|null $picture
+ * @property int $id_brand
+ * @property int $id_color
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CarBrand $brand
+ * @property-read \App\Models\CarColor $color
+ * @property-read \App\Models\Driver|null $driver
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereIdBrand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereIdColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereModel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle wherePatent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle wherePicture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Vehicle whereYear($value)
+ * @mixin \Eloquent
+ */
 class Vehicle extends Model
-{     
+{   
+    /**
+     * @var string La tabla que comunica al modelo.
+     */
     protected $table = 'vehicles';
 
+    /**
+     * @var array campos de asignación masiva permitida.
+     */
     protected $fillable = ['patent','model','year','picture','id_color','id_brand'];
 
+    /**
+     * @static $rules campos validación.
+     */
     public static $rules = [
         'patent' =>'required|min:6|max:10|unique:vehicles,patent',
         'model' =>'required|min:1|max:150',
@@ -28,7 +66,13 @@ class Vehicle extends Model
             'regex:/^[1-9]+\d*/'
         ),
     ];
-
+    
+    /**
+     * edit_rules Funcion para validar cuando se está editando
+     *
+     * @param  mixed $id
+     * @return array
+     */
     public static function edit_rules($id)
     {
         return [
@@ -52,6 +96,9 @@ class Vehicle extends Model
         ];
     }
 
+    /**
+     * @static $messages mensajes de validación.
+     */
     public static $messages = [
         'patent.required' => 'El campo no puede quedar vacío.',
         'patent.min' => 'La patente debe tener al menos 6 caracteres.',
